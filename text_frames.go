@@ -2,10 +2,17 @@ package id3v2
 
 import (
 	"log"
+	"strings"
 
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 )
+
+type UserTextFrame struct {
+	*Frame
+	Description string
+	Value       string
+}
 
 // 4.2.1
 
@@ -203,6 +210,23 @@ func (t *Tag) getTextInformationFrame(frameId string) string {
 		return ""
 	}
 	return decodeTextInformation(frame.Payload)
+}
+
+// 4.2.6
+func decodeUserTextFrame(f *Frame) *UserTextFrame {
+	s := decodeTextInformation(f.Payload)
+	i := strings.IndexByte(s, 0)
+	desc := ""
+	value := ""
+	if i == -1 {
+		log.Printf("No delimiter found in user text information frame")
+		desc = s
+	} else {
+		desc = s[:i]
+		value = s[i+1:]
+	}
+	u := &UserTextFrame{Frame: f, Description: desc, Value: value}
+	return u
 }
 
 func decodeTextInformation(buf []byte) string {
