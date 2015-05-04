@@ -212,6 +212,27 @@ func (t *Tag) getTextInformationFrame(frameId string) string {
 	return decodeTextInformation(frame.Payload)
 }
 
+// id3v2.3.0 4.2.1
+func (t *Tag) Date() string {
+	return t.getTextInformationFrame("TDAT")
+}
+
+func (t *Tag) Time() string {
+	return t.getTextInformationFrame("TIME")
+}
+
+func (t *Tag) OriginalReleaseYear() string {
+	return t.getTextInformationFrame("TOLY")
+}
+
+func (t *Tag) Size() string {
+	return t.getTextInformationFrame("TSIZ")
+}
+
+func (t *Tag) Year() string {
+	return t.getTextInformationFrame("TYER")
+}
+
 // 4.2.6
 func decodeUserTextFrame(f *Frame) *UserTextFrame {
 	s := decodeTextInformation(f.Payload)

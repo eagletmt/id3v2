@@ -96,6 +96,13 @@ func dumpInfo(path string, tag *id3v2.Tag) {
 	fmt.Printf("  Performer sort order: %s\n", tag.PerformerSortOrder())
 	fmt.Printf("  Title sort order: %s\n", tag.TitleSortOrder())
 	fmt.Println()
+	fmt.Printf("  Date: %s\n", tag.Date())
+	fmt.Printf("  Time: %s\n", tag.Time())
+	fmt.Printf("  Original release year: %s\n", tag.OriginalReleaseYear())
+	fmt.Printf("  Size: %s\n", tag.Size())
+	fmt.Printf("  Year: %s\n", tag.Year())
+	fmt.Println()
+
 	fmt.Printf("  %d user defined text information frames\n", len(tag.UserTextFrames))
 	for _, f := range tag.UserTextFrames {
 		fmt.Printf("    %s: %s\n", f.Description, f.Value)
