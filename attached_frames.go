@@ -35,7 +35,7 @@ func decodeAttachedPictureFrame(payload []byte) *AttachedPictureFrame {
 	rest := payload[i+3:]
 	j := bytes.IndexByte(rest, 0x00)
 	if j == -1 {
-		log.Printf("Cannot find Description termination in APIc frame")
+		log.Printf("Cannot find Description termination in APIC frame")
 		return nil
 	}
 	f.Description = decodeText(encoding, rest[:j+1])
