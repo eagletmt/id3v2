@@ -251,20 +251,23 @@ func decodeUserTextFrame(f *Frame) *UserTextFrame {
 }
 
 func decodeTextInformation(buf []byte) string {
-	encoding := buf[0]
+	return decodeText(buf[0], buf[1:])
+}
+
+func decodeText(encoding byte, buf []byte) string {
 	switch encoding {
 	case 0x00:
 		// ISO-8859-1 string terminated with NUL.
-		return decodeLatin1(buf[1:])
+		return decodeLatin1(buf)
 	case 0x01:
 		// UTF-16 string with BOM terminated with NUL.
-		return decodeUtf16(buf[1:])
+		return decodeUtf16(buf)
 	case 0x02:
 		// UTF-16BE string without BOM terminated with NUL.
-		return decodeUtf16be(buf[1:])
+		return decodeUtf16be(buf)
 	case 0x03:
 		// UTF-8 string terminated with NUL.
-		return string(buf[1:])
+		return string(buf)
 	default:
 		log.Printf("Unknown encoding: %#x", encoding)
 		return ""
