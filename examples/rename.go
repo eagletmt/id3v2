@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 
@@ -55,7 +56,14 @@ func format(tag *id3v2.Tag) (string, error) {
 		return "", fmt.Errorf("Empty title")
 	}
 
-	return safeFilename(toHankaku(fmt.Sprintf("[%s] %s.mp3", artist, title))), nil
+	track := tag.Track()
+	if idx := strings.Index(track, "/"); idx != -1 {
+		track = track[0:idx]
+	}
+	if n, err := strconv.Atoi(track); err == nil {
+		track = fmt.Sprintf("%02d", n)
+	}
+	return safeFilename(toHankaku(fmt.Sprintf("%s [%s] %s.mp3", track, artist, title))), nil
 }
 
 func toHankaku(s string) string {
