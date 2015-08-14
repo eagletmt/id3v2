@@ -47,9 +47,6 @@ func rename(path string) error {
 
 func format(tag *id3v2.Tag) (string, error) {
 	artist := tag.Artist()
-	if artist == "" {
-		return "", fmt.Errorf("Empty artist")
-	}
 
 	title := tag.Title()
 	if title == "" {
@@ -63,7 +60,13 @@ func format(tag *id3v2.Tag) (string, error) {
 	if n, err := strconv.Atoi(track); err == nil {
 		track = fmt.Sprintf("%02d", n)
 	}
-	return safeFilename(toHankaku(fmt.Sprintf("%s [%s] %s.mp3", track, artist, title))), nil
+	base := ""
+	if artist == "" {
+		base = fmt.Sprintf("%s %s.mp3", track, title)
+	} else {
+		base = fmt.Sprintf("%s [%s] %s.mp3", track, artist, title)
+	}
+	return safeFilename(toHankaku(base)), nil
 }
 
 func toHankaku(s string) string {
